@@ -13,6 +13,11 @@ const extractData = async (filename) => {
     .extract(filename, options)
     .then((data) => {
       //#region data handler
+      const removeSpaces = (str) => {
+        let retStr = '';
+        for (let i = 0; i < str.length; i++) if (str[i] !== ' ') retStr += str[i];
+        return retStr;
+      }
       const getDataBeginWith = (str, pattern) => {
         let pos = str.search(pattern);
         if (pos === -1) return "";
@@ -182,13 +187,13 @@ const extractData = async (filename) => {
         standardedStr = standardStr(str);
 
         if (standardedStr.match("mauso")) {
-          retJson.templateCode = getDataAfterColon(str);
+          retJson.templateCode = getDataAfterColon(str).trim();
         }
         if (standardedStr.match("kyhieu")) {
-          retJson.invoiceSeries = getDataAfterColon(str);
+          retJson.invoiceSeries = getDataAfterColon(str).trim();
         }
         if (standardedStr.match("so:") || standardedStr.match(/so\(/)) {
-          retJson.invoiceNumber = getDataAfterColon(str);
+          retJson.invoiceNumber = getDataAfterColon(str).trim();
         }
         if (standardedStr.match("hinhthucthanhtoan")) {
           // console.log(`Hinh thuc thanh toan: ${getDataAfterColon(str)}`);
@@ -196,9 +201,9 @@ const extractData = async (filename) => {
         }
         if (standardedStr.match("diachi:") || standardedStr.match(/diachi\(/)) {
           if (address1Found) {
-            retJson.buyerAddressLine = getDataAfterColon(str);
+            retJson.buyerAddressLine = getDataAfterColon(str).trim();
           } else {
-            retJson.sellerAddressLine = getDataAfterColon(str);
+            retJson.sellerAddressLine = getDataAfterColon(str).trim();
             address1Found = true;
           }
         }
@@ -207,17 +212,17 @@ const extractData = async (filename) => {
           standardedStr.match(/masothue\(/)
         ) {
           if (taxId1Found) {
-            retJson.buyerTaxCode = getDataAfterColon(str);
+            retJson.buyerTaxCode = removeSpaces(getDataAfterColon(str));
           } else {
-            retJson.sellerTaxCode = getDataAfterColon(str);
+            retJson.sellerTaxCode = removeSpaces(getDataAfterColon(str));
             taxId1Found = true;
           }
         }
         if (standardedStr.match("ngay")) {
-          retJson.invoiceIssuedDate = getDataBeginWith(str, "Ngày");
+          retJson.invoiceIssuedDate = getDataBeginWith(str, "Ngày").trim();
         }
         if (standardedStr.match("nguoimua")) {
-          retJson.buyerDisplayName = getDataAfterColon(str);
+          retJson.buyerDisplayName = getDataAfterColon(str).trim();
         }
         if (
           standardedStr.match("congty") ||
@@ -233,10 +238,10 @@ const extractData = async (filename) => {
             if (!dt) dt = getDataBeginWith(str, "Công ty");
           }
           if (companyFound) {
-            retJson.buyerLegalName = dt;
+            retJson.buyerLegalName = dt.trim();
 
           } else {
-            retJson.sellerLegalName = dt;
+            retJson.sellerLegalName = dt.trim();
             companyFound = true;
           }
         }
