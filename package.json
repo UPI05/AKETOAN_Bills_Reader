@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.0",
+    "imapflow": "^1.0.88",
     "lodash": "^4.17.21",
     "pdf-parse": "^1.1.1",
     "pdf.js-extract": "^0.1.5",

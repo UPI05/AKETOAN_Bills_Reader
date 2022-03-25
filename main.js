@@ -14,10 +14,11 @@ const extractData = async (filename) => {
     .then((data) => {
       //#region data handler
       const removeSpaces = (str) => {
-        let retStr = '';
-        for (let i = 0; i < str.length; i++) if (str[i] !== ' ') retStr += str[i];
+        let retStr = "";
+        for (let i = 0; i < str.length; i++)
+          if (str[i] !== " ") retStr += str[i];
         return retStr;
-      }
+      };
       const getDataBeginWith = (str, pattern) => {
         let pos = str.search(pattern);
         if (pos === -1) return "";
@@ -197,7 +198,6 @@ const extractData = async (filename) => {
         }
         if (standardedStr.match("hinhthucthanhtoan")) {
           // console.log(`Hinh thuc thanh toan: ${getDataAfterColon(str)}`);
-
         }
         if (standardedStr.match("diachi:") || standardedStr.match(/diachi\(/)) {
           if (address1Found) {
@@ -239,7 +239,6 @@ const extractData = async (filename) => {
           }
           if (companyFound) {
             retJson.buyerLegalName = dt.trim();
-
           } else {
             retJson.sellerLegalName = dt.trim();
             companyFound = true;
@@ -287,7 +286,6 @@ const extractData = async (filename) => {
           footer[footer.length - 1].push(dataMatrix[i][j]);
         }
       }
-
       // console.log("\nFooter: ");
 
       /*
@@ -308,11 +306,6 @@ const extractData = async (filename) => {
   return res;
 };
 
-const callExtractData = async() => {
-
-let dt = await extractData("./pdfs/1.pdf");
-
-console.log(dt);
-}
-
-callExtractData();
+extractData("./pdfs/1.pdf")
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));
